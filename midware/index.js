@@ -8,8 +8,20 @@ const app = express();
 const helmet = require("helmet");
 const morgan = require("morgan");
 
+//用config包管理配置，环境
+const config = require("config");
+
 const login = require("./login");
 const authenticating = require("./authenticating");
+
+// //看是开发环境还是生产环境——————>NODE_DEV:undefined app.get:development
+// //process是node全局对象，可以访问当前进程
+// console.log(`NODE_DEV:${process.env.NODE_ENV}`);
+// // app.get('env'); //获得当前系统的多个设定值
+// console.log(`app.get:${app.get("env")}`);
+
+console.log(`app name:${config.get("name")}`);
+console.log(`mail server:${config.get("mail.host")}`);
 
 //express的中间键
 app.use(express.json()); //req.body
@@ -20,7 +32,10 @@ app.use(express.static("public")); //向客户端提供静态文件
 // https://expressjs.com/
 //用helmet加强http heads安全性   morgan进行HTTP请求的日志记录
 app.use(helmet());
-app.use(morgan("tiny")); //记录结果————>GET /api/courses 200（状态码） 105 - 3.439 ms
+if (app.get("env") === "development") {
+  app.use(morgan("tiny"));
+  console.log("morgan enabled..");
+} //morgan记录get结果————>GET /api/courses 200（状态码） 105 - 3.439 ms（请求时间）
 
 //自定义的中间件
 app.use(login);
