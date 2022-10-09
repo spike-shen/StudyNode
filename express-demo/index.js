@@ -19,10 +19,6 @@ const courses = [
     id: 3,
     name: "course3",
   },
-  {
-    id: 4,
-    name: "course4",
-  },
 ];
 
 //环境变量（进程运行时才产生的变量）中管理端口的属性是PORT，用process对象读取PORT属性
